@@ -6,11 +6,17 @@ const { SubMenu } = Menu;
 class Shop extends Component {
     state = { visible: true };
 
-    showDrawer = () => {
+    showSidePanel = () => {
         this.setState({
             visible: true,
         });
     };
+
+    closeSidePanel = () => {
+        this.setState({
+            visible: false,
+        });
+    }
 
     renderMenu() {
         return (
@@ -32,61 +38,38 @@ class Shop extends Component {
     render() {
         return (
             <div className="shop-content">
-                <Drawer
-                    placement="left"
-                    closable={false}
-                    mask={false}
-                    width={180}
-                    visible={this.state.visible}
-                    getContainer=".shop-content"
-                    style={{ position: 'static' }}
-                    bodyStyle={{ padding: 0 }}
-                    maskStyle={{ marginRight: '180px' }}
-                >
-                    <div className="menu">
-                        <div className="expend-button">
-                            <Button icon="menu-fold" block={true} onClick={this.onClose}></Button>
-                        </div>
-                        {this.renderMenu()}
-                    </div>
-                </Drawer >
-                <Button icon="menu-unfold" block={true} type="primary" onClick={this.showDrawer} style={{
+
+                <Button icon="menu-unfold" block={true} type="primary" onClick={this.showSidePanel} style={{
                     position: 'absolute',
                     height: '100%',
                     width: '2em',
+                    borderRadius:'unset'
                 }}></Button>
+                <SizePanel width={180} visible={this.state.visible} className="size-panel">
+                    <div className="menu">
+                        <div className="expend-button">
+                            <Button icon="menu-fold" block={true} onClick={this.closeSidePanel}></Button>
+                        </div>
+                        {this.renderMenu()}
+                    </div>
+                </SizePanel>
                 <div className="shop-content-right">
                     1111111111
                 </div>
+
             </div>
 
         )
     }
 }
 
-// class SizePanel extends Component<any> {
-//     state = {
-
-//     }
-
-//     constructor(props: any) {
-//         super(props);
-//     }
-
-//     render() {
-
-//     }
-// }
-
 const SizePanel = (props: any) => {
     return (
         <div style={{
-            [props.placement]:0,
-            position: 'absolute',
             width: props.width + 'px',
-            transform: props.visible === true ? 'translateX(0)' : `translateX(-100%)`
-        }} className="transition-transform">
-
+            marginLeft: props.visible === true ? '0' : `-${props.width}px`
+        }} className={'transition-margin-left ' + props.className}>
+            {props.children}
         </div>
     )
 }

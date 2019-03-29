@@ -33,8 +33,9 @@
 
         .shop-content {
             width: 100%;
+            height: -webkit-fill-available;
             display: flex;
-
+            justify-content: space-between;
             .ant-drawer-content-wrapper {
                 position: absolute;
 
@@ -42,7 +43,10 @@
                     overflow: hidden !important;
                 }
             }
-
+            .size-panel{
+                background-color: #fff;
+                z-index: 1;
+            }
             .menu {
                 padding-right: .5em;
 
@@ -71,7 +75,7 @@
                 order: 1;
                 flex-grow: 1;
                 background: #339979;
-
+                max-width: ~'calc(100% - 2em)';
             }
         }
     }
