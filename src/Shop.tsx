@@ -12,12 +12,6 @@ class Shop extends Component {
         });
     };
 
-    onClose = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
     renderMenu() {
         return (
             <Menu mode="inline" defaultSelectedKeys={['1']}>
@@ -37,24 +31,64 @@ class Shop extends Component {
 
     render() {
         return (
-            <Drawer
-                title="Basic Drawer"
-                placement="left"
-                closable={false}
-                onClose={this.onClose}
-                visible={this.state.visible}
-                className="shop-content"
-                getContainer=".sub-content"
-            >
-                <div className="menu">
-                    <div className="expend-button">
-                        <Button icon="menu-fold" block={true} onClick={(e: any) => {  }}></Button>
+            <div className="shop-content">
+                <Drawer
+                    placement="left"
+                    closable={false}
+                    mask={false}
+                    width={180}
+                    visible={this.state.visible}
+                    getContainer=".shop-content"
+                    style={{ position: 'static' }}
+                    bodyStyle={{ padding: 0 }}
+                    maskStyle={{ marginRight: '180px' }}
+                >
+                    <div className="menu">
+                        <div className="expend-button">
+                            <Button icon="menu-fold" block={true} onClick={this.onClose}></Button>
+                        </div>
+                        {this.renderMenu()}
                     </div>
-                    {this.renderMenu()}
+                </Drawer >
+                <Button icon="menu-unfold" block={true} type="primary" onClick={this.showDrawer} style={{
+                    position: 'absolute',
+                    height: '100%',
+                    width: '2em',
+                }}></Button>
+                <div className="shop-content-right">
+                    1111111111
                 </div>
-            </Drawer>
+            </div>
+
         )
     }
+}
+
+// class SizePanel extends Component<any> {
+//     state = {
+
+//     }
+
+//     constructor(props: any) {
+//         super(props);
+//     }
+
+//     render() {
+
+//     }
+// }
+
+const SizePanel = (props: any) => {
+    return (
+        <div style={{
+            [props.placement]:0,
+            position: 'absolute',
+            width: props.width + 'px',
+            transform: props.visible === true ? 'translateX(0)' : `translateX(-100%)`
+        }} className="transition-transform">
+
+        </div>
+    )
 }
 
 export default Shop;

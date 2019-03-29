@@ -34,10 +34,17 @@ body {
 }
 
 .horizontal-space-around {
-  justify-content: space-around;
+    justify-content: space-around;
 }
 
 
 .border-none {
     border: none !important;
+}
+
+.transition-transform {
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+    transition: box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+    transition: transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+    transition: transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-transform 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
 }

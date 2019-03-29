@@ -4,7 +4,7 @@
 
     .tab-container {
         height: 4em;
-        padding-bottom: .5em;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 
         a.tab-logon {
             height: 100%;
@@ -19,6 +19,7 @@
     .sub-content {
         min-height: 800px;
         position: relative;
+        overflow: hidden;
 
         .home-content {
             img {
@@ -32,26 +33,25 @@
 
         .shop-content {
             width: 100%;
+            display: flex;
 
-            .variable-position-absolute {
+            .ant-drawer-content-wrapper {
                 position: absolute;
-                top: 0;
-                bottom: 0;
+
+                .ant-drawer-wrapper-body {
+                    overflow: hidden !important;
+                }
             }
 
-            .variable-position-absolute;
-
             .menu {
-                border-right: 1px solid #e8e8e8;
-                width: 20%;
-                max-width: 10em;
-                .variable-position-absolute;
+                padding-right: .5em;
 
                 .expend-button {
                     width: 100%;
                     height: auto;
-                    padding: 4px 6px;
                     text-align: center;
+                    padding: .5em;
+                    padding-right: 0;
 
                     button {
                         font-size: 2em;
@@ -66,6 +66,13 @@
                 }
             }
 
+            .shop-content-right {
+
+                order: 1;
+                flex-grow: 1;
+                background: #339979;
+
+            }
         }
     }
 }
