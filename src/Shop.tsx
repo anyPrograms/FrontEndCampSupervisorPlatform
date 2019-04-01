@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Button, Statistic, Drawer, Transfer, Pagination, Card, Icon } from 'antd';
+import { Menu, Button, Statistic, Modal, Transfer, Pagination, Card, Icon } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 
 const { SubMenu } = Menu;
@@ -41,15 +41,14 @@ class Shop extends Component<any>{
     render() {
         return (
             <div className="shop-content">
-
                 <Button icon="menu-unfold" block={true} type="primary" onClick={this.showSidePanel} style={{
-                    position: 'absolute',
-                    height: '100%',
                     width: '1.5em',
                     borderRadius: 'unset',
+                    position: 'absolute',
+                    height: '100%',
                     padding: 0
-                }}></Button>
-                <SizePanel width={180} visible={this.state.visible} className="size-panel">
+                }} />
+                <SizePanel minWidth={180} visible={this.state.visible} className="size-panel">
                     <div className="menu">
                         <div className="expend-button">
                             <Button icon="menu-fold" block={true} onClick={this.closeSidePanel}></Button>
@@ -57,54 +56,59 @@ class Shop extends Component<any>{
                         {this.renderMenu()}
                     </div>
                 </SizePanel>
-                <Switch>
-                    <Route path={this.props.match.url + "/camper"} component={Camper}></Route>
-                    <Route path={this.props.match.url + "/room"} component={() => (<h1>home</h1>)}></Route>
-                    <Redirect to={this.props.match.url + "/camper"}></Redirect>
-                </Switch>
-
-
+                <ShopRouter match={this.props.match}></ShopRouter>
             </div>
 
         )
     }
 }
 
+const ShopRouter = (props: any) => {
+    return (
+        <Switch>
+            <Route path={props.match.url + "/camper"} component={() => null}></Route>
+            <Route path={props.match.url + "/room"} component={RoomManage}></Route>
+            <Redirect to={props.match.url + "/camper"}></Redirect>
+        </Switch>
+    )
+}
+
 const SizePanel = (props: any) => {
     return (
         <div style={{
-            width: props.width + 'px',
-            marginLeft: props.visible === true ? '0' : `-${props.width}px`
+            minWidth: props.minWidth + 'px',
+            marginLeft: props.visible === true ? 0 : `-${props.minWidth}px`
         }} className={'transition-margin-left ' + props.className}>
             {props.children}
         </div>
     )
 }
 
-const Camper = () => {
+const RoomManage = () => {
     return (
         <div className="shop-content-right">
-            <div style={{ display: 'flex', justifyContent: 'center', boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)', padding: '1em 0' }}>
                 <Statistic title="未分配的人数" value={112893} />
                 <Statistic title="已分配的人数" value={112893} style={{ marginLeft: '2em' }} />
             </div>
-            <Room></Room>
+            <Rooms></Rooms>
+            <Pagination simple defaultCurrent={2} total={40} style={{ textAlign: 'center', padding: '1em' }} />
+            <CreateCamper />
         </div>
     )
 }
-class Room extends Component {
+
+//营员分配房间管理
+class Rooms extends Component {
     state = {
         mockData: [],
         targetKeys: [],
-        rooms: [{
+        modalVisible: false,
+        rooms: new Array(12).fill({
             name: 'room1',
             maxContains: 10,
             alreadyInCamperId: ['2', '5'],
-        }, {
-            name: 'room1',
-            maxContains: 10,
-            alreadyInCamperId: ['2', '5'],
-        }]
+        }, 0)
     }
 
     componentDidMount() {
@@ -135,25 +139,45 @@ class Room extends Component {
         this.setState({ targetKeys });
     }
 
+    showModal = () => {
+        this.setState({
+            modalVisible: true
+        })
+    }
+
+    closeModal = () => {
+        this.setState({
+            modalVisible: false
+        })
+    }
+
+    handleCardClick = (evt: any) => {
+        this.showModal();
+    }
+
     renderRooms() {
-        return <Card>{this.state.rooms.map((val, key) => (
-            <Card.Grid key={key} style={{
-                textAlign: 'center',
-                padding: '2em'
-            }}>
-                <p>room: {val.name}</p>
-                <p>number: {val.alreadyInCamperId.length + ` / ${val.maxContains}`}</p>
-            </Card.Grid>
-        ))}</Card>
+        return (
+            <Card>{this.state.rooms.map((val, key) => (
+                <Card.Grid key={key} style={{ padding: 0 }}>
+                    <div onClick={this.handleCardClick} style={{
+                        textAlign: 'center',
+                        padding: '2em'
+                    }}>
+                        <p >room: {val.name}</p>
+                        <p>number: {val.alreadyInCamperId.length + ` / ${val.maxContains}`}</p>
+                    </div>
+
+                </Card.Grid>
+            ))}</Card>
+        )
 
 
     }
 
     render() {
         return (
-            <div>
-
-                <Drawer placement="bottom">
+            <div style={{ overflow: 'hidden', display: 'flex' }}>
+                <Modal visible={this.state.modalVisible} onCancel={this.closeModal} footer={null} style={{ textAlign: 'center' }} centered title={'RoomName1'}>
                     <Transfer
                         dataSource={this.state.mockData}
                         filterOption={this.filterOption}
@@ -161,12 +185,25 @@ class Room extends Component {
                         onChange={this.handleChange}
                         render={(item: any) => item.title}
                     />
-                </Drawer>
+                </Modal>
                 {this.renderRooms()}
-                <Pagination simple defaultCurrent={2} total={40} style={{textAlign:'center',marginTop:'2em'}} />
             </div>
         )
     }
+}
+
+
+const CreateCamper = (props: any) => {
+    return (
+        <Button type="primary" icon="plus" className="border-radius-none" style={{
+            width: '1.5em',
+            borderRadius: 'unset',
+            position: 'absolute',
+            height: '100%',
+            right: 0,
+            padding: 0
+        }} />
+    )
 }
 
 export default Shop;
