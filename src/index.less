@@ -1,7 +1,6 @@
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
         'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
         sans-serif;
@@ -9,6 +8,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     background-color: #c3c3c33b !important;
 }
+
+@default-color: rgb(29, 165, 122);
+
 
 .display-flex {
     display: flex;
@@ -43,13 +45,64 @@ body {
     border: none !important;
 }
 
-.border-radius-none{
+.border-radius-none {
     border-radius: unset !important;
 }
 
-.transition-margin-left  {
+.transition-margin-left {
     -webkit-transition: box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     transition: box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     transition: margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
     transition: margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+}
+
+.tab-container-menu {
+    text-align: center;
+    list-style: none;
+    display: flex;
+    padding: 0px;
+    margin: 0;
+
+    .bottom-line {
+        content: '';
+        width: 100%;
+        left: 0;
+        border: 1px solid @default-color;
+    }
+
+    li[data-selected=true]::after {
+        .bottom-line;
+    }
+
+    @transition : border-color .3s cubic-bezier(.645, .045, .355, 1),
+    left .3s cubic-bezier(.645, .045, .355, 1),
+    width .3s cubic-bezier(.645, .045, .355, 1);
+
+    li::after {
+        content: '';
+        position: absolute;
+        border: 1px solid transparent;
+        width: 0;
+        bottom: 0;
+        left: 50%;
+        transition: @transition;
+    }
+
+    li:hover::after {
+        .bottom-line;
+        transition: @transition;
+    }
+
+    li {
+        display: flex;
+        position: relative;
+
+        a {
+            padding: 0 2em;
+            height: 100%;
+            align-items: center;
+            display: flex;
+            text-decoration: none;
+        }
+    }
 }
