@@ -56,52 +56,66 @@ body {
     transition: margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
 }
 
-.tab-container-menu {
-    text-align: center;
-    list-style: none;
+div.tab-container-menu {
     display: flex;
-    padding: 0px;
-    margin: 0;
-
-    .bottom-line {
-        content: '';
-        width: 100%;
-        left: 0;
-        border: 1px solid @default-color;
+    margin: .5em;
+    button.tab-container-menu-button {
+        display: none;
     }
 
-    li[data-selected=true]::after {
-        .bottom-line;
-    }
-
-    @transition : border-color .3s cubic-bezier(.645, .045, .355, 1),
-    left .3s cubic-bezier(.645, .045, .355, 1),
-    width .3s cubic-bezier(.645, .045, .355, 1);
-
-    li::after {
-        content: '';
-        position: absolute;
-        border: 1px solid transparent;
-        width: 0;
-        bottom: 0;
-        left: 50%;
-        transition: @transition;
-    }
-
-    li:hover::after {
-        .bottom-line;
-    }
-
-    li {
+    ul.tab-container-menu-list {
+        text-align: center;
+        list-style: none;
         display: flex;
-        position: relative;
+        padding: 0px;
+        margin: 0;
 
-        a {
-            padding: 0 2em;
-            height: 100%;
-            align-items: center;
+        .bottom-line {
+            width: 100%;
+            left: 0;
+            border: 1px solid @default-color;
+        }
+        li{
+            background-color: transparent;
+            transition: background-color .3s cubic-bezier(.645, .045, .355, 1);
+        }
+        li[data-selected=true] {
+            background-color: #d8e6df;
+        }
+
+        li[data-selected=true]::after{
+                .bottom-line;
+        }
+
+        @transition : border-color .3s cubic-bezier(.645, .045, .355, 1),
+        left .3s cubic-bezier(.645, .045, .355, 1),
+        width .3s cubic-bezier(.645, .045, .355, 1);
+
+        li::after {
+            content: '';
+            position: absolute;
+            border: 1px solid transparent;
+            width: 0;
+            bottom: 0;
+            left: 50%;
+            transition: @transition;
+        }
+
+        li:hover::after {
+            .bottom-line;
+        }
+
+        li {
             display: flex;
-            text-decoration: none;
+            position: relative;
+
+            a {
+                padding: 0 2em;
+                height: 100%;
+                align-items: center;
+                display: flex;
+                text-decoration: none;
+            }
         }
     }
 }

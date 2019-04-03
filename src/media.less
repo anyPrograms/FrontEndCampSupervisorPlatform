@@ -63,11 +63,58 @@
         .tab-container {
             width: 100%;
             justify-content: center;
+            position: relative;
 
-            .tab-container-menu {
-                position: absolute;
-                right: 0;
-                top: 0;
+            div.tab-container-menu {
+                background: darkred;
+                margin: 0;
+                align-items: center;
+
+                button.tab-container-menu-button {
+                    display: block;
+                }
+
+                ul.tab-container-menu-list {
+                    width: 100%;
+                    // max-width: 200px;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 1;
+                    transform: translateY(100%);
+                    overflow: hidden;
+                    flex-flow: column;
+                    max-height: 0;
+                    opacity: 0;
+                    transition: max-height .5s linear, opacity .5s linear;
+
+                    li {
+                        justify-content: center;
+                        background-color: #fff;
+                    }
+
+                    li::after {
+                        content: '';
+                        position: absolute;
+                        border: 0 solid transparent;
+                        width: 0;
+                        bottom: 0;
+                    }
+                    li[data-selected=true]{
+                        background-color: #d8e6df;
+                    }
+                    li[data-selected=true]::after {
+                        right: 0;
+                        left: unset;
+                        height: 100%;
+                        border: 2px solid #1da57a;
+                    }
+                }
+
+                ul.tab-container-menu-list-visible {
+                    max-height: 200px;
+                    opacity: 1;
+                }
             }
         }
     }
@@ -80,5 +127,28 @@
 
     body {
         margin: 0px auto !important;
+
+        #root {
+            .main-content {
+                width: 80%;
+            }
+        }
+    }
+}
+
+@media screen and (min-width:1000px) {
+    html {
+        font-size: 100px;
+    }
+
+    body {
+        margin: 0px auto !important;
+
+        #root {
+            .main-content {
+                width: 60%;
+                max-width: 1000px;
+            }
+        }
     }
 }
