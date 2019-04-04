@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.less';
-import { Menu, Tooltip, Button } from 'antd';
+import { Menu, Tooltip, Button, Icon } from 'antd';
 import { BrowserRouter, Link } from 'react-router-dom';
 import AppRoute from './AppRoute';
 interface state {
@@ -61,7 +61,8 @@ class TabMenu extends Component<any> {
 
   onClick = (selectedKey: string) => {
     this.setState({
-      selectedKey
+      selectedKey,
+      visible: !this.state.visible
     });
   }
 
@@ -73,7 +74,7 @@ class TabMenu extends Component<any> {
 
   render() {
     const menu = <div className="tab-container-menu">
-      <Button icon="menu" className="tab-container-menu-button" onClick={this.displayMenuList} />
+      <Icon type='menu' className="tab-container-menu-icon"onClick={this.displayMenuList} ></Icon>
       <ul className={`tab-container-menu-list ${this.state.visible ? 'tab-container-menu-list-visible' : ''}`}>
         {React.Children.map(this.props.children, (child: any) => {
           const props: any = {

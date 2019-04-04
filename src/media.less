@@ -53,9 +53,6 @@
 }
 
 @media screen and (max-width:800px) {
-    html {
-        position: fixed;
-    }
 
     .main-content {
         width: 100%;
@@ -66,21 +63,22 @@
             position: relative;
 
             div.tab-container-menu {
-                background: darkred;
                 margin: 0;
                 align-items: center;
 
-                button.tab-container-menu-button {
+                .tab-container-menu-icon {
                     display: block;
+                    position: absolute;
+                    right: 0;
+                    margin-right: 10%;
                 }
 
                 ul.tab-container-menu-list {
                     width: 100%;
-                    // max-width: 200px;
                     position: absolute;
                     bottom: 0;
                     left: 0;
-                    z-index: 1;
+                    z-index: 2;
                     transform: translateY(100%);
                     overflow: hidden;
                     flex-flow: column;
@@ -91,6 +89,7 @@
                     li {
                         justify-content: center;
                         background-color: #fff;
+                        padding: .5em 0;
                     }
 
                     li::after {
@@ -100,9 +99,11 @@
                         width: 0;
                         bottom: 0;
                     }
-                    li[data-selected=true]{
+
+                    li[data-selected=true] {
                         background-color: #d8e6df;
                     }
+
                     li[data-selected=true]::after {
                         right: 0;
                         left: unset;
@@ -114,6 +115,25 @@
                 ul.tab-container-menu-list-visible {
                     max-height: 200px;
                     opacity: 1;
+                    box-shadow: 1px 2px 3px 0px #d2d2d2;
+                }
+            }
+        }
+
+        .sub-content {
+            .shop-content {
+                .size-panel {
+                    position: absolute;
+                    bottom: 0;
+                    top: 0;
+                }
+
+                .room-manage-content {
+                    margin: 0 1.5em;
+                }
+
+                .camper-content {
+                    margin-left: 1.5em;
                 }
             }
         }

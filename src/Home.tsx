@@ -48,7 +48,7 @@ export default class Home extends Component<any, state> {
                 <img src={require('./img/overview.jpg')}></img>
                 <div>
                     <h1 className="news-header-title">Today's NEWS</h1>
-                    <div className="display-flex horizontal-space-around">
+                    <div className="display-flex horizontal-space-around flex-wrap">
                         {this.renderNewsList(this.state['list'])}
                     </div>
                 </div>

@@ -1,14 +1,11 @@
 .main-content {
     background-color: white;
+    box-shadow: 0px 0px 6px 4px #70847d91;
 
     .tab-container {
         height: 4em;
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-        .tab-container-menu{
-            li{
-                
-            }
-        }
+        z-index: 1;
 
         a.tab-logon {
             height: 100%;
@@ -40,6 +37,7 @@
             height: -webkit-fill-available;
             display: flex;
             justify-content: space-between;
+
             .ant-drawer-content-wrapper {
                 position: absolute;
 
@@ -47,11 +45,34 @@
                     overflow: hidden !important;
                 }
             }
-            .size-panel{
+
+            .size-panel {
                 box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
                 background-color: #fff;
                 z-index: 1;
             }
+
+            .camper-content {
+                flex-grow: 1;
+                max-width: calc(100% - 1.5em);
+
+                .camper-content-option-icons {
+                    padding: .5em;
+                    text-align: center;
+                    >button:not(:last-child) {
+                        margin-right: .5em;
+                    }
+                }
+
+                .camper-info-table {
+                    ul.ant-pagination.ant-table-pagination {
+                        display: flex;
+                        float: unset;
+                        justify-content: center;
+                    }
+                }
+            }
+
             .menu {
                 padding-right: .5em;
 
@@ -76,7 +97,7 @@
 
             }
 
-            .shop-content-right {
+            .room-manage-content {
                 display: flex;
                 flex-flow: column;
                 order: 1;
