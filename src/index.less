@@ -11,6 +11,10 @@ body {
 
 @default-color: rgb(29, 165, 122);
 
+.default-background-color {
+    background-color: @default-color  !important;
+}
+
 
 .display-flex {
     display: flex;
@@ -40,7 +44,7 @@ body {
     justify-content: space-around;
 }
 
-.flex-wrap{
+.flex-wrap {
     flex-wrap: wrap;
 }
 
@@ -59,9 +63,21 @@ body {
     transition: margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), -webkit-margin 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
 }
 
+.ant-tooltip-content {
+
+    >.ant-tooltip-arrow {
+        border-top-color: @default-color  !important;
+    }
+
+    >.ant-tooltip-inner {
+        background-color: @default-color  !important;
+    }
+}
+
 div.tab-container-menu {
     display: flex;
     margin: .5em;
+
     .tab-container-menu-icon {
         display: none;
         padding: 1em;
@@ -79,16 +95,18 @@ div.tab-container-menu {
             left: 0;
             border: 1px solid @default-color;
         }
-        li{
+
+        li {
             background-color: transparent;
             transition: background-color .3s cubic-bezier(.645, .045, .355, 1);
         }
+
         li[data-selected=true] {
             background-color: #d8e6df;
         }
 
-        li[data-selected=true]::after{
-                .bottom-line;
+        li[data-selected=true]::after {
+            .bottom-line;
         }
 
         @transition : border-color .3s cubic-bezier(.645, .045, .355, 1),
