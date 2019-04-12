@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect, useCallback } from 'react';
 import { Button, Statistic, Modal, Transfer, Pagination, Card, } from 'antd';
 
 const RoomManage = () => {
@@ -16,25 +16,18 @@ const RoomManage = () => {
 }
 
 //营员分配房间管理
-class Rooms extends Component {
-    state = {
-        mockData: [],
-        targetKeys: [],
-        modalVisible: false,
-        rooms: new Array(12).fill({
-            name: 'room1',
-            maxContains: 10,
-            alreadyInCamperId: ['2', '5'],
-        }, 0)
-    }
-
-    componentDidMount() {
-        this.getMock();
-    }
-
-    getMock = () => {
-        const targetKeys = [];
-        const mockData = [];
+const Rooms = (props: any) => {
+    const [mockData, setMockData] = useState([]);
+    const [targetKeys, setTargetKeys] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [rooms, setRooms] = useState(() => new Array(12).fill({
+        name: 'room1',
+        maxContains: 10,
+        alreadyInCamperId: ['2', '5'],
+    }, 0));
+    const getMock = useCallback(() => {
+        const targetKeys: any = [];
+        const mockData: any = [];
         for (let i = 0; i < 20; i++) {
             const data = {
                 key: i.toString(),
@@ -47,36 +40,32 @@ class Rooms extends Component {
             }
             mockData.push(data);
         }
-        this.setState({ mockData, targetKeys });
+        setMockData(mockData);
+        setTargetKeys(targetKeys);
+    }, []);
+    const filterOption = (inputValue: string, option: any) => option.description.indexOf(inputValue) > -1
+
+    const handleChange = (targetKeys: any) => {
+        setTargetKeys(targetKeys);
     }
 
-    filterOption = (inputValue: string, option: any) => option.description.indexOf(inputValue) > -1
-
-    handleChange = (targetKeys: any) => {
-        this.setState({ targetKeys });
+    const showModal = () => {
+        setModalVisible(true);
     }
 
-    showModal = () => {
-        this.setState({
-            modalVisible: true
-        })
+    const closeModal = () => {
+        setModalVisible(false);
     }
 
-    closeModal = () => {
-        this.setState({
-            modalVisible: false
-        })
+    const handleCardClick = (evt: any) => {
+        showModal();
     }
 
-    handleCardClick = (evt: any) => {
-        this.showModal();
-    }
-
-    renderRooms() {
+    const renderRooms = () => {
         return (
-            <Card>{this.state.rooms.map((val, key) => (
+            <Card>{rooms.map((val, key) => (
                 <Card.Grid key={key} style={{ padding: 0, minWidth: '100px' }}>
-                    <div onClick={this.handleCardClick} style={{
+                    <div onClick={handleCardClick} style={{
                         textAlign: 'center',
                         padding: '2em'
                     }}>
@@ -89,22 +78,25 @@ class Rooms extends Component {
         )
     }
 
-    render() {
-        return (
-            <div style={{ overflow: 'hidden', display: 'flex' }}>
-                <Modal visible={this.state.modalVisible} onCancel={this.closeModal} footer={null} style={{ textAlign: 'center' }} centered title={'RoomName1'}>
-                    <Transfer
-                        dataSource={this.state.mockData}
-                        filterOption={this.filterOption}
-                        targetKeys={this.state.targetKeys}
-                        onChange={this.handleChange}
-                        render={(item: any) => item.title}
-                    />
-                </Modal>
-                {this.renderRooms()}
-            </div>
-        )
-    }
+    useEffect(() => {
+        getMock();
+    }, [getMock])
+
+    return (
+        <div style={{ overflow: 'hidden', display: 'flex' }}>
+            <Modal visible={modalVisible} onCancel={closeModal} footer={null} style={{ textAlign: 'center' }} centered title={'RoomName1'}>
+                <Transfer
+                    dataSource={mockData}
+                    filterOption={filterOption}
+                    targetKeys={targetKeys}
+                    onChange={handleChange}
+                    render={(item: any) => item.title}
+                />
+            </Modal>
+            {renderRooms()}
+        </div>
+    )
+
 }
 
 const CreateRoom = (props: any) => {

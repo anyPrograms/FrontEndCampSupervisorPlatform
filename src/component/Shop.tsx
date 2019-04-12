@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Menu, Button } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import RoomManage from './RoomManage';
@@ -6,23 +6,19 @@ import CamperManage from './CamperManage';
 
 const { SubMenu } = Menu;
 
-class Shop extends Component<any>{
-    state = { visible: true };
+const Shop = (props: any) => {
+    const [visible, setVisible] = useState(true);
 
-    showSidePanel = () => {
-        this.setState({
-            visible: true,
-        });
+    const showSidePanel = () => {
+        setVisible(true)
     };
 
-    closeSidePanel = () => {
-        this.setState({
-            visible: false,
-        });
+    const closeSidePanel = () => {
+        setVisible(false)
     }
 
-    renderMenu() {
-        const rootUrl = this.props.match.url;
+    const renderMenu = () => {
+        const rootUrl = props.match.url;
         const defaultKey: any = location.pathname.split('/').pop();
         return (
             <Menu mode="inline" defaultSelectedKeys={[defaultKey === 'shop' ? 'camper' : defaultKey]}>
@@ -40,30 +36,30 @@ class Shop extends Component<any>{
         );
     }
 
-    render() {
-        return (
-            <div className="shop-content">
-                <Button icon="menu-unfold" block={true} type="primary" onClick={this.showSidePanel} style={{
-                    width: '1.5em',
-                    borderRadius: 'unset',
-                    position: 'absolute',
-                    height: '100%',
-                    padding: 0
-                }} />
-                <SizePanel minWidth={180} visible={this.state.visible} className="size-panel">
-                    <div className="menu">
-                        <div className="expend-button">
-                            <Button icon="menu-fold" block={true} onClick={this.closeSidePanel}></Button>
-                        </div>
-                        {this.renderMenu()}
-                    </div>
-                </SizePanel>
-                <ShopRouter match={this.props.match}></ShopRouter>
-            </div>
 
-        )
-    }
+    return (
+        <div className="shop-content">
+            <Button icon="menu-unfold" block={true} type="primary" onClick={showSidePanel} style={{
+                width: '1.5em',
+                borderRadius: 'unset',
+                position: 'absolute',
+                height: '100%',
+                padding: 0
+            }} />
+            <SizePanel minWidth={180} visible={visible} className="size-panel">
+                <div className="menu">
+                    <div className="expend-button">
+                        <Button icon="menu-fold" block={true} onClick={closeSidePanel}></Button>
+                    </div>
+                    {renderMenu()}
+                </div>
+            </SizePanel>
+            <ShopRouter match={props.match}></ShopRouter>
+        </div>
+
+    )
 }
+
 
 const ShopRouter = (props: any) => {
     return (

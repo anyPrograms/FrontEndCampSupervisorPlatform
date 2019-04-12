@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.less';
-import './media.less';
-import App from './App';
+import './less/index.less';
+import './less/media.less';
+import App from './component/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));

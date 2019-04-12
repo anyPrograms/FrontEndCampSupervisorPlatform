@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.less';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import Shop from './Shop';
