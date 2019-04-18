@@ -1,10 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, SFC, ReactNode, ReactElement } from 'react';
 import '../less/App.less';
 import { Icon } from 'antd';
 import { BrowserRouter, Link } from 'react-router-dom';
 import AppRoute from './AppRoute';
 
-const App = (props: any) => {
+const App = () => {
   const [current,] = useState(() => {
     const pathname: string = location.pathname;
     return pathname.split('/')[1] || 'home';
@@ -34,30 +34,35 @@ const App = (props: any) => {
   );
 }
 
-const TabMenu = (props: any) => {
-  const [selectedKey, setSelectedKey] = useState(props.selectedKey);
+type TabMenuProps = {
+  selectedKey: string;
+}
+
+const TabMenu: SFC<TabMenuProps> = ({ selectedKey: defaultSelectedKey, children }) => {
+  const [selectedKey, setSelectedKey] = useState(defaultSelectedKey);
   const [visible, setVisible] = useState(false);
-  const onClick = (selectedKey: string) => {
+  const handleChangeTab = (selectedKey: string) => {
     setSelectedKey(selectedKey);
     setVisible(!visible);
   };
 
-  const displayMenuList = () => {
-    setVisible(!visible);
-  };
-
   const menu = <div className="tab-container-menu">
-    <Icon type='menu' className="tab-container-menu-icon" onClick={displayMenuList} ></Icon>
+    <Icon type='menu' className="tab-container-menu-icon" onClick={() => setVisible(!visible)} ></Icon>
     <ul className={`tab-container-menu-list ${visible ? 'tab-container-menu-list-visible' : ''}`}>
-      {React.Children.map(props.children, (child: any) => {
-        const props: any = {
-          parentsClickHandle: onClick,
-          eventKey: child.key
+      {React.Children.map(children, (child: ReactNode) => {
+
+        const props: {
+          parentsClickHandle(selectedKey: string): void;
+          eventKey: string;
+          selected?: boolean;
+        } = {
+          parentsClickHandle: handleChangeTab,
+          eventKey: (child as any).key
         }
-        if (child.key === selectedKey) {
+        if ((child as any).key === selectedKey) {
           props['selected'] = true;
         }
-        return React.cloneElement(child, props);
+        return React.cloneElement(child as ReactElement, props);
       })}
     </ul>
   </div>
@@ -65,12 +70,16 @@ const TabMenu = (props: any) => {
   return menu;
 }
 
-
-const Item = (props: any) => {
+type ItemType = {
+  parentsClickHandle?(eventKey: string): void;
+  eventKey?: string;
+  selected?: boolean;
+}
+const Item: SFC<ItemType> = ({ parentsClickHandle, eventKey, selected, children }) => {
   const onclick = () => {
-    props.parentsClickHandle && props.parentsClickHandle(props.eventKey);
+    parentsClickHandle && parentsClickHandle(eventKey as string);
   }
-  return <li onClick={onclick} data-selected={props.selected} > {props.children}</li >
+  return <li onClick={onclick} data-selected={selected} > {children}</li >
 }
 
 export default App;
