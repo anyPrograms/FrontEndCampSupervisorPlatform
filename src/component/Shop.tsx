@@ -1,21 +1,14 @@
-import React, { Component, useState } from 'react';
+import React, { SFC, useState } from 'react';
 import { Menu, Button } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import RoomManage from './RoomManage';
 import CamperManage from './CamperManage';
+import { RouterProps } from 'react-router';
 
 const { SubMenu } = Menu;
 
-const Shop = (props: any) => {
+const Shop: SFC<RouterProps> = (props: RouterProps) => {
     const [visible, setVisible] = useState(true);
-
-    const showSidePanel = () => {
-        setVisible(true)
-    };
-
-    const closeSidePanel = () => {
-        setVisible(false)
-    }
 
     const renderMenu = () => {
         const rootUrl = props.match.url;
@@ -39,7 +32,7 @@ const Shop = (props: any) => {
 
     return (
         <div className="shop-content">
-            <Button icon="menu-unfold" block={true} type="primary" onClick={showSidePanel} style={{
+            <Button icon="menu-unfold" block={true} type="primary" onClick={() => setVisible(true)} style={{
                 width: '1.5em',
                 borderRadius: 'unset',
                 position: 'absolute',
@@ -49,7 +42,7 @@ const Shop = (props: any) => {
             <SizePanel minWidth={180} visible={visible} className="size-panel">
                 <div className="menu">
                     <div className="expend-button">
-                        <Button icon="menu-fold" block={true} onClick={closeSidePanel}></Button>
+                        <Button icon="menu-fold" block={true} onClick={() => setVisible(false)}></Button>
                     </div>
                     {renderMenu()}
                 </div>
@@ -61,7 +54,7 @@ const Shop = (props: any) => {
 }
 
 
-const ShopRouter = (props: any) => {
+const ShopRouter: SFC<RouterProps> = (props: any) => {
     return (
         <Switch>
             <Route path={props.match.url + "/camper"} component={CamperManage}></Route>

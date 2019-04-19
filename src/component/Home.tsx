@@ -9,7 +9,7 @@ interface news {
 interface state {
     list: Array<news>;
 }
-const Home = (props: any) => {
+const Home = () => {
     
     const [list, setList] = useState([{
         imgSrc: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',

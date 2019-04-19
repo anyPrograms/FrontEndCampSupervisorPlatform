@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, ReactNode } from 'react';
 import { Button, Statistic, Modal, Transfer, Pagination, Card, } from 'antd';
 
 const RoomManage = () => {
@@ -16,18 +16,18 @@ const RoomManage = () => {
 }
 
 //营员分配房间管理
-const Rooms = (props: any) => {
+const Rooms = () => {
     const [mockData, setMockData] = useState([]);
     const [targetKeys, setTargetKeys] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [rooms, setRooms] = useState(() => new Array(12).fill({
+    const [rooms] = useState(() => new Array(12).fill({
         name: 'room1',
         maxContains: 10,
         alreadyInCamperId: ['2', '5'],
     }, 0));
     const getMock = useCallback(() => {
-        const targetKeys: any = [];
-        const mockData: any = [];
+        const targetKeys: string[] = [];
+        const mockData: object[] = [];
         for (let i = 0; i < 20; i++) {
             const data = {
                 key: i.toString(),
@@ -40,32 +40,20 @@ const Rooms = (props: any) => {
             }
             mockData.push(data);
         }
-        setMockData(mockData);
-        setTargetKeys(targetKeys);
+        setMockData(mockData as any);
+        setTargetKeys(targetKeys as any);
     }, []);
     const filterOption = (inputValue: string, option: any) => option.description.indexOf(inputValue) > -1
 
-    const handleChange = (targetKeys: any) => {
-        setTargetKeys(targetKeys);
-    }
-
-    const showModal = () => {
-        setModalVisible(true);
-    }
-
     const closeModal = () => {
         setModalVisible(false);
-    }
-
-    const handleCardClick = (evt: any) => {
-        showModal();
     }
 
     const renderRooms = () => {
         return (
             <Card>{rooms.map((val, key) => (
                 <Card.Grid key={key} style={{ padding: 0, minWidth: '100px' }}>
-                    <div onClick={handleCardClick} style={{
+                    <div onClick={() => setModalVisible(true)} style={{
                         textAlign: 'center',
                         padding: '2em'
                     }}>
@@ -89,8 +77,8 @@ const Rooms = (props: any) => {
                     dataSource={mockData}
                     filterOption={filterOption}
                     targetKeys={targetKeys}
-                    onChange={handleChange}
-                    render={(item: any) => item.title}
+                    onChange={(targetKeys: string[]) => setTargetKeys(targetKeys as [])}
+                    render={(item: ReactNode) => (item as any).title}
                 />
             </Modal>
             {renderRooms()}
@@ -99,7 +87,7 @@ const Rooms = (props: any) => {
 
 }
 
-const CreateRoom = (props: any) => {
+const CreateRoom = () => {
     return (
         <Button type="primary" icon="plus" className="border-radius-none" style={{
             width: '1.5em',

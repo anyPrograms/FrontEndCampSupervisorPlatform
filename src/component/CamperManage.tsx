@@ -1,8 +1,20 @@
-import React, { Component, useState } from 'react';
+import React, { useState, MouseEvent, ReactNode, SFC } from 'react';
 import { Button, Table, Input, Icon, Form, InputNumber, Tooltip } from 'antd';
+import { ColumnProps } from 'antd/lib/table/interface';
 
-const CamperManage = (props: any) => {
-    const renderInput = (type: string, defaultValue: any, name: string) => {
+type StudentType = {
+    studentId: string | number;
+    studentName: string;
+    studentStatus: number;
+    studentBunk: number;
+}
+
+type ColumnType = StudentType & {
+    onCell?(onCell: any): void;
+};
+
+const CamperManage: SFC = (props: any) => {
+    const renderInput = (type: string, defaultValue: string, name: string) => {
         const { getFieldDecorator } = props.form;
         return <Form.Item hasFeedback >{getFieldDecorator(name, {
             initialValue: defaultValue,
@@ -10,20 +22,15 @@ const CamperManage = (props: any) => {
         })((() => type === 'number' ? <InputNumber></InputNumber> : <Input />)())} </Form.Item>
     }
 
-    const rowEditable = (editKey: number) => {// editKey === -1 means no rows is editable
-        setEditKey(editKey);
-    }
-
-    const rowEventHandle = (record: any) => ({
-    })
-
-    const handleSubmit = (e: any, obj: any) => {
+    const handleSubmit = (e: MouseEvent<HTMLElement>, obj: {
+        key: number
+    }) => {
         e.preventDefault();
-        props.form.validateFields((err: any, values: any) => {
+        props.form.validateFields((err: Error, values: any) => {
             values = { ...values, ...obj };
             if (!err) {
                 updateData(values);
-                rowEditable(-1);
+                setEditKey(-1);
             }
         });
     }
@@ -32,7 +39,7 @@ const CamperManage = (props: any) => {
 
     }
 
-    const getColumnSearchProps = (): object => ({
+    const getColumnSearchProps = () => ({
         filterDropdown: ({
             setSelectedKeys,
             selectedKeys,
@@ -64,11 +71,11 @@ const CamperManage = (props: any) => {
                 </Button>
             </div>)
         },
-        filterIcon: (filtered: any) => <Icon type="search" style={{ color: filtered ? 'red' : 'rgb(29, 165, 122)' }} />
+        filterIcon: (filtered: string) => <Icon type="search" style={{ color: filtered ? 'red' : 'rgb(29, 165, 122)' }} />
     })
 
     const [editKey, setEditKey] = useState(-1);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading] = useState(false);
     const components = {
         body: {
             cell: (props: any) => {
@@ -80,7 +87,7 @@ const CamperManage = (props: any) => {
                         if (editKey === -1)
                             return (<>
                                 <Tooltip placement="top" title={'编辑本行信息'} >
-                                    <a data-disabled='false' onClick={() => rowEditable(record.studentId)}> <Icon type="form"></Icon></a>
+                                    <a data-disabled='false' onClick={() => setEditKey(record.studentId)}> <Icon type="form"></Icon></a>
                                 </Tooltip>
                                 <Tooltip placement="top" title={'删除本行信息'} >
                                     <a style={{ color: 'rgb(29, 165, 122)ed', marginLeft: '1em' }} onClick={() => { }}> <Icon type="delete"></Icon></a>
@@ -89,9 +96,9 @@ const CamperManage = (props: any) => {
                             )
                         if (editable) {
                             return React.Children.toArray([
-                                <a onClick={(e: any) => handleSubmit(e, { key: editKey })} style={{ marginRight: '1em' }}>
+                                <a onClick={(e: MouseEvent<HTMLElement>) => handleSubmit(e, { key: editKey })} style={{ marginRight: '1em' }}>
                                     <Icon type="check"></Icon></a>,
-                                <a onClick={() => rowEditable(-1)}><Icon type="close"></Icon></a>
+                                <a onClick={() => setEditKey(-1)}><Icon type="close"></Icon></a>
                             ])
                         } else {
 
@@ -128,12 +135,12 @@ const CamperManage = (props: any) => {
         width: '20%'
     }];
 
-    const columns: any = columnsData.map((val: any) => ({
+    const columns: ColumnProps<ColumnType>[] = columnsData.map((val: any) => ({
         ...val,
         onCell: (record: any) => ({
             record,
-            dataIndex: val.dataIndex,
-            type: typeof record[val.dataIndex],
+            dataIndex: (val as any).dataIndex,
+            type: typeof record[(val as any).dataIndex],
             editKey: editKey
         })
     }));
@@ -141,14 +148,14 @@ const CamperManage = (props: any) => {
     return (
         <div className="camper-content">
             <Form>
-                <Table rowKey="studentId" loading={isLoading} dataSource={dataSource} columns={columns} components={components} className="camper-info-table" onRow={rowEventHandle} />
+                <Table rowKey="studentId" loading={isLoading} dataSource={dataSource} columns={columns} components={components} className="camper-info-table" />
             </Form>
         </div>
     )
 }
 
-const editableFormTable: any = Form.create()(CamperManage);
-export default editableFormTable;
+const EditableFormTable: SFC = Form.create()(CamperManage) as any;
+export default EditableFormTable;
 
 
 
@@ -169,7 +176,7 @@ export default editableFormTable;
 
 
 
-const dataSource = new Array(100).fill(0).map((val, index) => {
+const dataSource: StudentType[] = new Array(100).fill(0).map((_val, index) => {
     return {
         studentId: index,
         studentName: '胡彦斌',

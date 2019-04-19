@@ -4,6 +4,15 @@ import { Icon } from 'antd';
 import { BrowserRouter, Link } from 'react-router-dom';
 import AppRoute from './AppRoute';
 
+type TabMenuProps = {
+  selectedKey: string;
+}
+type ItemType = {
+  parentsClickHandle?(eventKey: string): void;
+  eventKey?: string;
+  selected?: boolean;
+}
+
 const App = () => {
   const [current,] = useState(() => {
     const pathname: string = location.pathname;
@@ -34,10 +43,6 @@ const App = () => {
   );
 }
 
-type TabMenuProps = {
-  selectedKey: string;
-}
-
 const TabMenu: SFC<TabMenuProps> = ({ selectedKey: defaultSelectedKey, children }) => {
   const [selectedKey, setSelectedKey] = useState(defaultSelectedKey);
   const [visible, setVisible] = useState(false);
@@ -51,11 +56,7 @@ const TabMenu: SFC<TabMenuProps> = ({ selectedKey: defaultSelectedKey, children 
     <ul className={`tab-container-menu-list ${visible ? 'tab-container-menu-list-visible' : ''}`}>
       {React.Children.map(children, (child: ReactNode) => {
 
-        const props: {
-          parentsClickHandle(selectedKey: string): void;
-          eventKey: string;
-          selected?: boolean;
-        } = {
+        const props: ItemType = {
           parentsClickHandle: handleChangeTab,
           eventKey: (child as any).key
         }
@@ -70,11 +71,6 @@ const TabMenu: SFC<TabMenuProps> = ({ selectedKey: defaultSelectedKey, children 
   return menu;
 }
 
-type ItemType = {
-  parentsClickHandle?(eventKey: string): void;
-  eventKey?: string;
-  selected?: boolean;
-}
 const Item: SFC<ItemType> = ({ parentsClickHandle, eventKey, selected, children }) => {
   const onclick = () => {
     parentsClickHandle && parentsClickHandle(eventKey as string);
