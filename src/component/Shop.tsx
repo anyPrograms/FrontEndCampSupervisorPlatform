@@ -47,14 +47,14 @@ const Shop: SFC<RouterProps> = (props: RouterProps) => {
                     {renderMenu()}
                 </div>
             </SizePanel>
-            <ShopRouter match={props.match}></ShopRouter>
+            <ShopRouter match={props.match as any}></ShopRouter>
         </div>
 
     )
 }
 
 
-const ShopRouter: SFC<RouterProps> = (props: any) => {
+const ShopRouter: SFC<any> = (props: any) => {
     return (
         <Switch>
             <Route path={props.match.url + "/camper"} component={CamperManage}></Route>

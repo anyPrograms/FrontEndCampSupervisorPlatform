@@ -1,10 +1,12 @@
-import React, { useState, MouseEvent, ReactNode, SFC } from 'react';
+import React, { useState, MouseEvent, ReactNode, SFC, useEffect, Component } from 'react';
 import { Button, Table, Input, Icon, Form, InputNumber, Tooltip } from 'antd';
 import { ColumnProps } from 'antd/lib/table/interface';
+import { baseUrl } from '../url/url';
 
 type StudentType = {
-    studentId: string | number;
+    studentId: string;
     studentName: string;
+    studentAge: string;
     studentStatus: number;
     studentBunk: number;
 }
@@ -13,15 +15,18 @@ type ColumnType = StudentType & {
     onCell?(onCell: any): void;
 };
 
-const CamperManage: SFC = (props: any) => {
-    const renderInput = (type: string, defaultValue: string, name: string) => {
-        const { getFieldDecorator } = props.form;
-        return <Form.Item hasFeedback >{getFieldDecorator(name, {
-            initialValue: defaultValue,
-            rules: [{ required: true, message: '' }]
-        })((() => type === 'number' ? <InputNumber></InputNumber> : <Input />)())} </Form.Item>
-    }
+const CamperManage = (props: any) => {
 
+
+    const renderInput = (type: string, required: boolean, defaultValue: string | number, name: string) => {
+        const { getFieldDecorator } = props.form;
+        console.log(11);
+        return <Form.Item> {getFieldDecorator(name, {
+            initialValue: defaultValue,
+            rules: [{ required, message: '' }],
+        })(type === 'number' ? <InputNumber /> : <Input />)} </Form.Item>
+    }
+    const { getFieldDecorator } = props.form;
     const handleSubmit = (e: MouseEvent<HTMLElement>, obj: {
         key: number
     }) => {
@@ -38,6 +43,13 @@ const CamperManage: SFC = (props: any) => {
     const updateData = (newData: any) => {
 
     }
+
+    useEffect(() => {
+        fetch(baseUrl + 'csp/con/student/all')
+            .then(data => data.json())
+            .then((json: []) => { setDataSource(json as any) })
+            .catch(e => console.log(e))
+    }, []);
 
     const getColumnSearchProps = () => ({
         filterDropdown: ({
@@ -76,10 +88,11 @@ const CamperManage: SFC = (props: any) => {
 
     const [editKey, setEditKey] = useState(-1);
     const [isLoading] = useState(false);
+    const [dataSource, setDataSource] = useState();
     const components = {
         body: {
             cell: (props: any) => {
-                const { editKey, record, dataIndex, type } = props;
+                const { editKey, record, dataIndex, type, required } = props;
                 if (!record) return <td>{props.children}</td>
                 const editable = record.studentId === editKey;
                 if (dataIndex === 'opreate') {
@@ -107,7 +120,7 @@ const CamperManage: SFC = (props: any) => {
                     })()
                     }</td>
                 }
-                return <td>{editable ? renderInput(type, record[dataIndex], dataIndex) : props.children}</td>;
+                return <td>{editable ? renderInput(type, required, record[dataIndex], dataIndex) : props.children}</td>;
             },
         },
     };
@@ -116,11 +129,16 @@ const CamperManage: SFC = (props: any) => {
         title: 'ID',
         dataIndex: 'studentId',
         width: '20%',
+        required: true,
         ...getColumnSearchProps(),
     }, {
         title: '姓名',
         dataIndex: 'studentName',
         width: '20%'
+    }, {
+        title: '年龄',
+        dataIndex: 'studentAge',
+        width: '10%'
     }, {
         title: '铺位',
         dataIndex: 'studentBunk',
@@ -128,7 +146,7 @@ const CamperManage: SFC = (props: any) => {
     }, {
         title: '状态',
         dataIndex: 'studentStatus',
-        width: '20%'
+        width: '10%'
     }, {
         title: '编辑',
         dataIndex: 'opreate',
@@ -139,12 +157,14 @@ const CamperManage: SFC = (props: any) => {
         ...val,
         onCell: (record: any) => ({
             record,
+            required: val["required"] ? true : false,
             dataIndex: (val as any).dataIndex,
             type: typeof record[(val as any).dataIndex],
             editKey: editKey
         })
     }));
 
+    console.log('render');
     return (
         <div className="camper-content">
             <Form>
@@ -173,14 +193,3 @@ export default EditableFormTable;
 
 
 
-
-
-
-const dataSource: StudentType[] = new Array(100).fill(0).map((_val, index) => {
-    return {
-        studentId: index,
-        studentName: '胡彦斌',
-        studentStatus: Math.random() > .5 ? 0 : 1,
-        studentBunk: 32 + index
-    }
-});
