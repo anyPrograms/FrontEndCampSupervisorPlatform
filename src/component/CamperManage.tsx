@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent, ReactNode, SFC, useEffect, Component } from 'react';
-import { Button, Table, Input, Icon, Form, InputNumber, Tooltip } from 'antd';
+import { Button, Table, Input, Icon, Form, InputNumber, Tooltip, Row, Col, Select } from 'antd';
 import { ColumnProps } from 'antd/lib/table/interface';
 import { baseUrl } from '../url/url';
 import { render } from 'react-dom';
@@ -16,7 +16,7 @@ type ColumnType = StudentType & {
     onCell?(onCell: any): void;
 };
 
-class CamperManage extends Component<any>{
+class CamperManageForm extends Component<any>{
 
 
     renderInput = (type: string, required: boolean, defaultValue: string | number, name: string) => {
@@ -170,18 +170,70 @@ class CamperManage extends Component<any>{
 
     render() {
         return (
-            <div className="camper-content">
-                <Form>
-                    <Table rowKey="studentId" loading={this.state.isLoading} dataSource={this.state.dataSource} columns={this.columns} components={this.components} className="camper-info-table" />
-                </Form>
-            </div>
+            <Table rowKey="studentId" loading={this.state.isLoading} dataSource={this.state.dataSource} columns={this.columns} components={this.components} className="camper-info-table" />
         )
     }
 
 }
 
-const EditableFormTable: SFC = Form.create()(CamperManage) as any;
-export default EditableFormTable;
+const SearchCamper = (props: any) => {
+    const { getFieldDecorator } = props.form;
+    const Option = Select.Option;
+    return (
+        <Form>
+            <Row>
+                <Col className="gutter-row" span={6}>
+                    <Form.Item>
+                        {getFieldDecorator(`field`, {
+                            rules: [{
+                                required: true,
+                                message: 'Input something!',
+                            }],
+                        })(
+                            <Input placeholder="placeholder" />
+                        )}
+                    </Form.Item>
+                </Col>
+                <Col className="gutter-row" span={6}>
+                    <Form.Item>
+                        {getFieldDecorator(`field`, {
+                            rules: [{
+                                required: true,
+                                message: 'Input something!',
+                            }],
+                        })(
+                            <Select
+                                showSearch
+                                style={{ width: 200 }}
+                                placeholder="Select a person"
+                                optionFilterProp="children"
+                            >
+                                <Option value="jack">Jack</Option>
+                                <Option value="lucy">Lucy</Option>
+                                <Option value="tom">Tom</Option>
+                            </Select>,
+                        )}
+                    </Form.Item>
+                </Col>
+
+
+            </Row>
+        </Form>
+    )
+}
+
+const EditableFormTable: SFC = Form.create()(CamperManageForm) as any;
+const SearchCamperForm: SFC = Form.create()(SearchCamper) as any;
+const CamperManage = () => {
+    return (
+        <div className="camper-content">
+            <SearchCamperForm></SearchCamperForm>
+            <EditableFormTable />
+        </div>
+    )
+}
+
+export default CamperManage;
 
 
 
