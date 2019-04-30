@@ -11,7 +11,7 @@ const Shop: SFC<RouterProps> = (props: RouterProps) => {
     const [visible, setVisible] = useState(true);
 
     const renderMenu = () => {
-        const rootUrl = props.match.url;
+        const rootUrl = (props as any).match.url;
         const defaultKey: any = location.pathname.split('/').pop();
         return (
             <Menu mode="inline" defaultSelectedKeys={[defaultKey === 'shop' ? 'camper' : defaultKey]}>
@@ -47,7 +47,7 @@ const Shop: SFC<RouterProps> = (props: RouterProps) => {
                     {renderMenu()}
                 </div>
             </SizePanel>
-            <ShopRouter match={props.match as any}></ShopRouter>
+            <ShopRouter match={(props as any).match as any}></ShopRouter>
         </div>
 
     )
