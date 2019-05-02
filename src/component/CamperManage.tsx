@@ -50,40 +50,6 @@ class CamperManageForm extends Component<any>{
             .catch(e => console.log(e))
     }
 
-    getColumnSearchProps = () => ({
-        filterDropdown: ({
-            setSelectedKeys,
-            selectedKeys,
-            confirm,
-            clearFilters
-        }: any) => {
-            return (<div style={{ padding: 8 }}>
-                <Input
-                    placeholder={`Search `}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
-                />
-                <Button
-                    type="primary"
-                    onClick={confirm}
-                    icon="search"
-                    size="small"
-                    style={{ width: 90, marginRight: 8 }}
-                >
-                    Search
-                </Button>
-                <Button
-                    onClick={clearFilters}
-                    size="small"
-                    style={{ width: 90 }}
-                >
-                    Reset
-                </Button>
-            </div>)
-        },
-        filterIcon: (filtered: string) => <Icon type="search" style={{ color: filtered ? 'red' : 'rgb(29, 165, 122)' }} />
-    })
     state = {
         editKey: -1,
         isLoading: false,
@@ -132,8 +98,7 @@ class CamperManageForm extends Component<any>{
         title: 'ID',
         dataIndex: 'studentId',
         width: '20%',
-        required: true,
-        ...this.getColumnSearchProps(),
+        required: true
     }, {
         title: '姓名',
         dataIndex: 'studentName',
@@ -185,12 +150,8 @@ const SearchCamper = (props: any) => {
                 <Col className="gutter-row" span={6}>
                     <Form.Item>
                         {getFieldDecorator(`field`, {
-                            rules: [{
-                                required: true,
-                                message: 'Input something!',
-                            }],
                         })(
-                            <Input placeholder="placeholder" />
+                            <Input placeholder="搜索名称..." />
                         )}
                     </Form.Item>
                 </Col>
@@ -205,7 +166,7 @@ const SearchCamper = (props: any) => {
                             <Select
                                 showSearch
                                 style={{ width: 200 }}
-                                placeholder="Select a person"
+                                placeholder="全部角色"
                                 optionFilterProp="children"
                             >
                                 <Option value="jack">Jack</Option>
@@ -215,7 +176,23 @@ const SearchCamper = (props: any) => {
                         )}
                     </Form.Item>
                 </Col>
-
+                <Col className="gutter-row" span={6}>
+                    <Form.Item>
+                        {getFieldDecorator(`field`, {
+                        })(
+                            <Select
+                                showSearch
+                                style={{ width: 200 }}
+                                placeholder="全部"
+                                optionFilterProp="children"
+                            >
+                                <Option value="jack">Jack</Option>
+                                <Option value="lucy">Lucy</Option>
+                                <Option value="tom">Tom</Option>
+                            </Select>,
+                        )}
+                    </Form.Item>
+                </Col>
 
             </Row>
         </Form>
