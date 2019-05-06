@@ -137,235 +137,233 @@ const SearchCamper = (props: any) => {
     const Option = Select.Option;
     return (
         <Form className="search-form">
-                <Form.Item>
-                    {getFieldDecorator(`field`, {
-                    })(
-                        <Input placeholder="搜索名称..." />
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator(`field`, {
-                        rules: [{
-                            required: true,
-                            message: 'Input something!',
-                        }],
-                    })(
-                        <Select
-                            showSearch
-                            style={{ width: 200 }}
-                            placeholder="全部角色"
-                            optionFilterProp="children"
-                        >
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="tom">Tom</Option>
-                        </Select>,
-                    )}
-                </Form.Item>
-                <Form.Item>
-                    {getFieldDecorator(`field`, {
-                    })(
-                        <Select
-                            showSearch
-                            style={{ width: 200 }}
-                            placeholder="全部"
-                            optionFilterProp="children"
-                        >
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="tom">Tom</Option>
-                        </Select>,
-                    )}
-                </Form.Item>
+            <Button icon="double-right"></Button>
+            <div>
+{getFieldDecorator(`field`, {
+})(
+    <Input placeholder="搜索名称..." />
+)}
+{getFieldDecorator(`field`, {
+    rules: [{
+        required: true,
+        message: 'Input something!',
+    }],
+})(
+    <Select
+        showSearch
+        style={{ width: 200 }}
+        placeholder="全部角色"
+        optionFilterProp="children"
+    >
+        <Option value="jack">Jack</Option>
+        <Option value="lucy">Lucy</Option>
+        <Option value="tom">Tom</Option>
+    </Select>,
+)}
+{getFieldDecorator(`field`, {
+})(
+    <Select
+        showSearch
+        style={{ width: 200 }}
+        placeholder="全部"
+        optionFilterProp="children"
+    >
+        <Option value="jack">Jack</Option>
+        <Option value="lucy">Lucy</Option>
+        <Option value="tom">Tom</Option>
+    </Select>,
+)}
+            </div>
+            
         </Form>
-            )
-        }
-        
+    )
+}
+
 const AddCamper = (props: any) => {
-    const {getFieldDecorator} = props.form;
-            const [modelVisible, setModelVisible] = useState(false);
+    const { getFieldDecorator } = props.form;
+    const [modelVisible, setModelVisible] = useState(false);
     const onOk = () => {
-                props.form.validateFields((err: Error, values: any) => {
-                    if (!err) {
-                        setModelVisible(false);
-                        updateData(values);
-                    }
-                });
+        props.form.validateFields((err: Error, values: any) => {
+            if (!err) {
+                setModelVisible(false);
+                updateData(values);
             }
-        
+        });
+    }
+
     const updateData = (values: any) => {
-                props.addCamperData(values);
-            }
-        
+        props.addCamperData(values);
+    }
+
     type camperInputOfFormProps = {
-                label: string;
-            name: string;
-            required: boolean;
-            placeholder?: string;
-            defaultValue?: number,
-            render: ReactNode;
-        }
+        label: string;
+        name: string;
+        required: boolean;
+        placeholder?: string;
+        defaultValue?: number,
+        render: ReactNode;
+    }
     const camperKeys: camperInputOfFormProps[] = [{
-                label: '营员姓名',
-            name: 'studentName',
-            required: true,
+        label: '营员姓名',
+        name: 'studentName',
+        required: true,
         render: <Input />
-            }, {
-                label: '营员性别',
-            name: 'studentGender',
-            required: true,
+    }, {
+        label: '营员性别',
+        name: 'studentGender',
+        required: true,
         render: <RadioGroup >
-                <Radio value={0}>女</Radio>
-                <Radio value={1}>男</Radio>
-            </RadioGroup>
-            }, {
-                label: '营员年龄段',
-            name: 'studentGrade',
-            required: true,
+            <Radio value={0}>女</Radio>
+            <Radio value={1}>男</Radio>
+        </RadioGroup>
+    }, {
+        label: '营员年龄段',
+        name: 'studentGrade',
+        required: true,
         render: <RadioGroup >
-                <Radio value={1}>小</Radio>
-                <Radio value={2}>中</Radio>
-                <Radio value={3}>大</Radio>
-            </RadioGroup>
-            }, {
-                label: '营期年份',
-            name: 'studentYear',
-            required: true,
+            <Radio value={1}>小</Radio>
+            <Radio value={2}>中</Radio>
+            <Radio value={3}>大</Radio>
+        </RadioGroup>
+    }, {
+        label: '营期年份',
+        name: 'studentYear',
+        required: true,
         render: <InputNumber></InputNumber>
-            }, {
-                label: '营员状态',
-            name: 'studentStatus',
-            required: false,
-            defaultValue: 1,
+    }, {
+        label: '营员状态',
+        name: 'studentStatus',
+        required: false,
+        defaultValue: 1,
         render: <RadioGroup >
-                <Radio value={0}>0</Radio>
-                <Radio value={1}>1</Radio>
-            </RadioGroup>
-            }, {
-                label: '营员年龄',
-            name: 'studentAge',
-            required: true,
+            <Radio value={0}>0</Radio>
+            <Radio value={1}>1</Radio>
+        </RadioGroup>
+    }, {
+        label: '营员年龄',
+        name: 'studentAge',
+        required: true,
         render: <InputNumber></InputNumber>
-            }];
-        
+    }];
+
     const createCamper = (camperKeys: camperInputOfFormProps[]) => {
         return <Form>
-                <Row gutter={16}>
-                    {camperKeys.map(camper => (
-                        <Col key={camper.name} className="gutter-row" span={12}>
-                            <Form.Item label={camper.label}>
-                                {getFieldDecorator(camper.name, {
-                                    rules: [{
-                                        required: camper.required,
-                                        message: camper.label + '不能为空'
-                                    }],
-                                    initialValue: camper.defaultValue || null
-                                })(
-                                    camper.render
-                                )}
-                            </Form.Item>
-                        </Col>
-                    ))}
-                </Row>
-            </Form>
-            }
-        
-            return (
-        <>
-                <Button onClick={() => setModelVisible(true)}>添加营员</Button>
-                <Modal
-                    title="Basic Modal"
-                    visible={modelVisible}
-                    onOk={onOk}
-                    destroyOnClose={true}
-                    onCancel={() => setModelVisible(false)}
-                >
-                    {createCamper(camperKeys)}
-                </Modal>
+            <Row gutter={16}>
+                {camperKeys.map(camper => (
+                    <Col key={camper.name} className="gutter-row" span={12}>
+                        <Form.Item label={camper.label}>
+                            {getFieldDecorator(camper.name, {
+                                rules: [{
+                                    required: camper.required,
+                                    message: camper.label + '不能为空'
+                                }],
+                                initialValue: camper.defaultValue || null
+                            })(
+                                camper.render
+                            )}
+                        </Form.Item>
+                    </Col>
+                ))}
+            </Row>
+        </Form>
+    }
 
-            </>
-            )
-        }
-        
-        const EditableFormTable: SFC = Form.create()(CamperManageForm) as any;
-        const SearchCamperForm: SFC = Form.create()(SearchCamper) as any;
-        const AddCamperForm: SFC = Form.create()(AddCamper) as any;
-        
+    return (
+        <>
+            <Button onClick={() => setModelVisible(true)}>添加营员</Button>
+            <Modal
+                title="Basic Modal"
+                visible={modelVisible}
+                onOk={onOk}
+                destroyOnClose={true}
+                onCancel={() => setModelVisible(false)}
+            >
+                {createCamper(camperKeys)}
+            </Modal>
+
+        </>
+    )
+}
+
+const EditableFormTable: SFC = Form.create()(CamperManageForm) as any;
+const SearchCamperForm: SFC = Form.create()(SearchCamper) as any;
+const AddCamperForm: SFC = Form.create()(AddCamper) as any;
+
 const CamperManage = (props: any) => {
     const [isTableLoading, setIsTableLoading] = useState(true);
-        
+
     const messageSuccess = (text: string) => {
-                message.success(text);
-            };
-        
+        message.success(text);
+    };
+
     const getCampersData = () => {
-                fetch(baseUrl + 'csp/con/student/all')
-                    .then(data => data.json())
-                    .then((json: []) => {
-                        setCampersData(json);
-                        setIsTableLoading(false);//数据完成解除加载动画
-                    })
-                    .catch(e => console.log(e));
-            }
-        
+        fetch(baseUrl + 'csp/con/student/all')
+            .then(data => data.json())
+            .then((json: []) => {
+                setCampersData(json);
+                setIsTableLoading(false);//数据完成解除加载动画
+            })
+            .catch(e => console.log(e));
+    }
+
     const refreshCampersData = () => {
-                setIsTableLoading(true);//添加加载动画
-            getCampersData();
-        }
-    
+        setIsTableLoading(true);//添加加载动画
+        getCampersData();
+    }
+
     const deleteCamperData = (studentId: string) => {
-                setIsTableLoading(true);//添加加载动画
-            fetch(baseUrl + 'csp/con/student/deleteById/' + studentId, {
-                method: 'post',
+        setIsTableLoading(true);//添加加载动画
+        fetch(baseUrl + 'csp/con/student/deleteById/' + studentId, {
+            method: 'post',
             mode: 'cors'
         }).then(value => value.json())
             .then(result => {
                 refreshCampersData();
-            messageSuccess('删除成功！');
-        })
-        .catch(e => console.log(e));
-}
+                messageSuccess('删除成功！');
+            })
+            .catch(e => console.log(e));
+    }
 
     const addCamperData = (values: any) => {
-                setIsTableLoading(true);//添加加载动画
-            let params = (() => {
+        setIsTableLoading(true);//添加加载动画
+        let params = (() => {
             return '?' + Object.keys(values).map(key => {
                 return key + '=' + values[key]
-        }).join('&');
-    })();
+            }).join('&');
+        })();
 
         fetch(baseUrl + 'csp/con/student/add' + params, {
-                method: 'post',
+            method: 'post',
             mode: 'cors'
         }).then(value => value.json())
             .then(result => {
                 refreshCampersData();
-            messageSuccess('添加成功！');
-        })
-        .catch(e => console.log(e));
-}
+                messageSuccess('添加成功！');
+            })
+            .catch(e => console.log(e));
+    }
 
-const [campersData, setCampersData] = useState();
+    const [campersData, setCampersData] = useState();
 
     useEffect(() => {
-                getCampersData();
-            }, [])
-        
+        getCampersData();
+    }, [])
+
     const childProps: typeof props = {
-                deleteCamperData,
-            addCamperData,
-            refreshCampersData,
-            campersData,
-            isTableLoading
-        }
-    
-        return (
+        deleteCamperData,
+        addCamperData,
+        refreshCampersData,
+        campersData,
+        isTableLoading
+    }
+
+    return (
         <div className="camper-content">
-                <SearchCamperForm></SearchCamperForm>
-                <AddCamperForm {...{ addCamperData } as typeof props}></AddCamperForm>
-                <EditableFormTable {...childProps} />
-            </div>
-            )
-        }
-        
+            <SearchCamperForm></SearchCamperForm>
+            <AddCamperForm {...{ addCamperData } as typeof props}></AddCamperForm>
+            <EditableFormTable {...childProps} />
+        </div>
+    )
+}
+
 export default CamperManage;
