@@ -57,16 +57,19 @@
                 max-width: calc(100% - 1.5em);
 
                 .search-form {
-                    display: flex;
+                    display: inline-flex;
+                    padding: 0 1em;
+                    .form-content {
+                        display: flex;
+                        transition: width 0.5s;
+                        width: 0;
+                        overflow: hidden;
+                    }
 
                     >.ant-row {
                         min-width: 100px;
                     }
                 }
-
-                // >.ant-form>.ant-row>.ant-col-6.gutter-row>.ant-row.ant-form-item {
-                //     margin-bottom: 0;
-                // }
 
                 .camper-info-table {
                     ul.ant-pagination.ant-table-pagination {

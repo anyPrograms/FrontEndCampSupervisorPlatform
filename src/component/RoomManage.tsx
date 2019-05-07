@@ -1,19 +1,6 @@
 import React, { useState, useEffect, useCallback, ReactNode } from 'react';
 import { Button, Statistic, Modal, Transfer, Pagination, Card, } from 'antd';
-
-const RoomManage = () => {
-    return (
-        <div className="room-manage-content">
-            <div style={{ display: 'flex', justifyContent: 'center', boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)', padding: '1em 0' }}>
-                <Statistic title="未分配的人数" value={112893} />
-                <Statistic title="已分配的人数" value={112893} style={{ marginLeft: '2em' }} />
-            </div>
-            <Rooms></Rooms>
-            <Pagination simple defaultCurrent={2} total={40} style={{ textAlign: 'center', padding: '1em' }} />
-            <CreateRoom />
-        </div>
-    )
-}
+import { baseUrl } from '../url/url';
 
 //营员分配房间管理
 const Rooms = () => {
@@ -100,5 +87,46 @@ const CreateRoom = () => {
     )
 }
 
+const RoomManage = () => {
+    const [countUndistributed, setCountUndistributed] = useState(0);
+    const [undistributedCampers, setUndistributedCampers] = useState([]);
+    const [distributedCampers, setDistributedCampers] = useState([]);
+
+    const getCountUndistributed = () => {
+        fetch(baseUrl + 'csp/con/student/countUndistributed')
+            .then(data => data.text())
+            .then(countUndistributed => setCountUndistributed(Number(countUndistributed)));
+    }
+
+    const getAllCampersData = () => {
+        fetch(baseUrl + 'csp/con/student/all').then(data => data.json()).then(campers => {
+            const undistributedCampers: any[] = [];
+            const distributedCampers: any[] = [];
+            campers.forEach((camper: any) => {
+                if (camper['studentBunk']) {
+                    distributedCampers.push(camper);
+                } else {
+                    undistributedCampers.push(camper);
+                }
+            });
+            setUndistributedCampers(undistributedCampers as never[]);
+            setDistributedCampers(distributedCampers as never[]);
+        });
+    }
+
+    useEffect(() => getAllCampersData(), []);
+
+    return (
+        <div className="room-manage-content">
+            <div style={{ display: 'flex', justifyContent: 'center', boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)', padding: '1em 0' }}>
+                <Statistic title="未分配的人数" value={undistributedCampers.length} />
+                <Statistic title="已分配的人数" value={distributedCampers.length} style={{ marginLeft: '2em' }} />
+            </div>
+            <Rooms></Rooms>
+            <Pagination simple defaultCurrent={2} total={40} style={{ textAlign: 'center', padding: '1em' }} />
+            <CreateRoom />
+        </div>
+    )
+}
 
 export default RoomManage;

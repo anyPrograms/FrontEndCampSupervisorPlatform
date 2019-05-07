@@ -133,49 +133,65 @@ class CamperManageForm extends Component<any>{
 }
 
 const SearchCamper = (props: any) => {
-    const { getFieldDecorator } = props.form;
+    const { getFieldDecorator, resetFields } = props.form;
     const Option = Select.Option;
+    const [isSpreadForm, setIsSpreadForm] = useState(false);
+    const { roomsData = [], findCamperData,refreshCampersData } = props;
+    const onSubmitHandle = () => {
+        props.form.validateFields((err: Error, values: any) => {
+            Object.keys(values).forEach(key => {
+                if (values[key] === undefined) {
+                    delete values[key];
+                }
+            });
+            if (!err) {
+                findCamperData(values);
+            }
+        });
+    }
+    const clearSearchForm = ()=>{
+        resetFields();
+        refreshCampersData();
+    }
     return (
-        <Form className="search-form">
-            <Button icon="double-right"></Button>
-            <div>
-{getFieldDecorator(`field`, {
-})(
-    <Input placeholder="搜索名称..." />
-)}
-{getFieldDecorator(`field`, {
-    rules: [{
-        required: true,
-        message: 'Input something!',
-    }],
-})(
-    <Select
-        showSearch
-        style={{ width: 200 }}
-        placeholder="全部角色"
-        optionFilterProp="children"
-    >
-        <Option value="jack">Jack</Option>
-        <Option value="lucy">Lucy</Option>
-        <Option value="tom">Tom</Option>
-    </Select>,
-)}
-{getFieldDecorator(`field`, {
-})(
-    <Select
-        showSearch
-        style={{ width: 200 }}
-        placeholder="全部"
-        optionFilterProp="children"
-    >
-        <Option value="jack">Jack</Option>
-        <Option value="lucy">Lucy</Option>
-        <Option value="tom">Tom</Option>
-    </Select>,
-)}
-            </div>
-            
-        </Form>
+        <div className="search-form">
+            <Button icon={isSpreadForm ? 'double-left' : 'search'} onClick={() => setIsSpreadForm(!isSpreadForm)}></Button>
+            <Form className={`form-content ${isSpreadForm ? 'width-100' : ''}`} onSubmit={onSubmitHandle}>
+                {getFieldDecorator(`name`, {
+                })(
+                    <Input placeholder="营员名字..." className="width-unset" />
+                )}
+                {getFieldDecorator(`bunk`, {
+                })(
+                    <Select
+                        showSearch
+                        style={{ width: 200 }}
+                        placeholder="营员房间"
+                        optionFilterProp="children"
+                    >
+                        {
+                            roomsData.map(({ bunkId }: any) => <Option key={bunkId} value={bunkId}>{bunkId}</Option>)
+                        }
+                    </Select>,
+                )}
+                {getFieldDecorator(`status`, {
+                })(
+                    <Select
+                        showSearch
+                        style={{ width: 200 }}
+                        placeholder="全部"
+                        optionFilterProp="children"
+                    >
+                        <Option value="0">未参加</Option>
+                        <Option value="1">正常参加</Option>
+                        <Option value="3">外出就医</Option>
+                        <Option value="4">意外退出</Option>
+                    </Select>,
+                )}
+                <Button icon="delete" onClick={clearSearchForm }></Button>
+                <Button icon="search" onClick={onSubmitHandle} />
+            </Form>
+        </div>
     )
 }
 
@@ -306,6 +322,22 @@ const CamperManage = (props: any) => {
             .catch(e => console.log(e));
     }
 
+    const findCamperData = (values: any) => {
+        setIsTableLoading(true);//添加加载动画
+        let params = (() => {
+            return '?' + Object.keys(values).map(key => {
+                return key + '=' + values[key]
+            }).join('&');
+        })();
+        fetch(baseUrl + 'csp/con/student/findByFilters' + params)
+            .then(data => data.json())
+            .then((json: []) => {
+                setCampersData(json);
+                setIsTableLoading(false);//数据完成解除加载动画
+            })
+            .catch(e => console.log(e));
+    }
+
     const refreshCampersData = () => {
         setIsTableLoading(true);//添加加载动画
         getCampersData();
@@ -343,10 +375,18 @@ const CamperManage = (props: any) => {
             .catch(e => console.log(e));
     }
 
+    const getRoomsData = () => {
+        fetch(baseUrl + 'csp/con/bunk/all')
+            .then(data => data.json())
+            .then(json => setRoomsData(json));
+    }
+
     const [campersData, setCampersData] = useState();
+    const [roomsData, setRoomsData] = useState();
 
     useEffect(() => {
         getCampersData();
+        getRoomsData();
     }, [])
 
     const childProps: typeof props = {
@@ -359,8 +399,8 @@ const CamperManage = (props: any) => {
 
     return (
         <div className="camper-content">
-            <SearchCamperForm></SearchCamperForm>
             <AddCamperForm {...{ addCamperData } as typeof props}></AddCamperForm>
+            <SearchCamperForm {...{ findCamperData, roomsData ,refreshCampersData} as typeof props}></SearchCamperForm>
             <EditableFormTable {...childProps} />
         </div>
     )
