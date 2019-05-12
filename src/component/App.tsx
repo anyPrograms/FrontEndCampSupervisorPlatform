@@ -1,4 +1,4 @@
-import React, { Component, useState, SFC, ReactNode, ReactElement } from 'react';
+import React, { useState, SFC, ReactNode, ReactElement } from 'react';
 import '../less/App.less';
 import { Icon } from 'antd';
 import { BrowserRouter, Link } from 'react-router-dom';

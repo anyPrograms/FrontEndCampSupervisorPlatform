@@ -6,6 +6,7 @@
         height: 4em;
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
         z-index: 1;
+        margin-bottom: 4px;
 
         a.tab-logon {
             height: 100%;
@@ -56,20 +57,7 @@
                 flex-grow: 1;
                 max-width: calc(100% - 1.5em);
 
-                .search-form {
-                    display: inline-flex;
-                    padding: 0 1em;
-                    .form-content {
-                        display: flex;
-                        transition: width 0.5s;
-                        width: 0;
-                        overflow: hidden;
-                    }
-
-                    >.ant-row {
-                        min-width: 100px;
-                    }
-                }
+                .search-form-style;
 
                 .camper-info-table {
                     ul.ant-pagination.ant-table-pagination {
@@ -92,6 +80,23 @@
                         }
                     }
 
+                }
+            }
+
+            .elective-manage-content {
+                flex-grow: 1;
+                display: flex;
+                max-width: ~'calc(100% - 1.5em)';
+
+                .search-form-style;
+
+                >div:first-child {
+                    flex-grow: 1;
+                }
+                >div:last-child{//课表
+                    margin-left: 1em;
+                    border-left: 1px solid #d9d9d9;
+                    flex-grow: 1;
                 }
             }
 
@@ -129,4 +134,23 @@
             }
         }
     }
+}
+
+.search-form-style {
+    .search-form {
+        display: inline-flex;
+        padding: 0 1em;
+
+        .form-content {
+            display: flex;
+            transition: width 0.5s;
+            width: 0;
+            overflow: hidden;
+        }
+
+        >.ant-row {
+            min-width: 100px;
+        }
+    }
+
 }

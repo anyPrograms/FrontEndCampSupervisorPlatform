@@ -4,6 +4,7 @@ import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import RoomManage from './RoomManage';
 import CamperManage from './CamperManage';
 import { RouterProps } from 'react-router';
+import ElectiveManage from './ElectiveManage';
 
 const { SubMenu } = Menu;
 
@@ -18,7 +19,7 @@ const Shop: SFC<RouterProps> = (props: RouterProps) => {
                 <Menu.Item key="camper"><Link to={rootUrl + "/camper"}>营员管理</Link></Menu.Item>
                 <Menu.Item key="room"><Link to={rootUrl + "/room"}>房间管理</Link></Menu.Item>
                 <SubMenu key="sub1" title={<span>选修管理</span>}>
-                    <Menu.Item key="sub11">选修报名</Menu.Item>
+                    <Menu.Item key="sub11"><Link to={rootUrl + "/elective"}>选修报名</Link></Menu.Item>
                     <Menu.Item key="sub12">课堂管理</Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub2" title={<span>待办事项</span>}>
@@ -59,6 +60,7 @@ const ShopRouter: SFC<any> = (props: any) => {
         <Switch>
             <Route path={props.match.url + "/camper"} component={CamperManage}></Route>
             <Route path={props.match.url + "/room"} component={RoomManage}></Route>
+            <Route path={props.match.url + "/elective"} component={ElectiveManage}></Route>
             <Redirect to={props.match.url + "/camper"}></Redirect>
         </Switch>
     )

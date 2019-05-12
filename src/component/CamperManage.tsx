@@ -136,7 +136,7 @@ const SearchCamper = (props: any) => {
     const { getFieldDecorator, resetFields } = props.form;
     const Option = Select.Option;
     const [isSpreadForm, setIsSpreadForm] = useState(false);
-    const { roomsData = [], findCamperData,refreshCampersData } = props;
+    const { roomsData = [], findCamperData, refreshCampersData } = props;
     const onSubmitHandle = () => {
         props.form.validateFields((err: Error, values: any) => {
             Object.keys(values).forEach(key => {
@@ -149,7 +149,7 @@ const SearchCamper = (props: any) => {
             }
         });
     }
-    const clearSearchForm = ()=>{
+    const clearSearchForm = () => {
         resetFields();
         refreshCampersData();
     }
@@ -188,7 +188,7 @@ const SearchCamper = (props: any) => {
                         <Option value="4">意外退出</Option>
                     </Select>,
                 )}
-                <Button icon="delete" onClick={clearSearchForm }></Button>
+                <Button icon="delete" onClick={clearSearchForm}></Button>
                 <Button icon="search" onClick={onSubmitHandle} />
             </Form>
         </div>
@@ -263,24 +263,23 @@ const AddCamper = (props: any) => {
     }];
 
     const createCamper = (camperKeys: camperInputOfFormProps[]) => {
-        return <Form>
-            <Row gutter={16}>
-                {camperKeys.map(camper => (
-                    <Col key={camper.name} className="gutter-row" span={12}>
-                        <Form.Item label={camper.label}>
-                            {getFieldDecorator(camper.name, {
-                                rules: [{
-                                    required: camper.required,
-                                    message: camper.label + '不能为空'
-                                }],
-                                initialValue: camper.defaultValue || null
-                            })(
-                                camper.render
-                            )}
-                        </Form.Item>
-                    </Col>
-                ))}
-            </Row>
+        return <Form layout="horizontal" {...{
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 },
+        }}>
+            {camperKeys.map(camper => (
+                <Form.Item key={camper.name} label={camper.label}>
+                    {getFieldDecorator(camper.name, {
+                        rules: [{
+                            required: camper.required,
+                            message: camper.label + '不能为空'
+                        }],
+                        initialValue: camper.defaultValue || null
+                    })(
+                        camper.render
+                    )}
+                </Form.Item>
+            ))}
         </Form>
     }
 
@@ -400,10 +399,12 @@ const CamperManage = (props: any) => {
     return (
         <div className="camper-content">
             <AddCamperForm {...{ addCamperData } as typeof props}></AddCamperForm>
-            <SearchCamperForm {...{ findCamperData, roomsData ,refreshCampersData} as typeof props}></SearchCamperForm>
+            <SearchCamperForm {...{ findCamperData, roomsData, refreshCampersData } as typeof props}></SearchCamperForm>
             <EditableFormTable {...childProps} />
         </div>
     )
 }
 
 export default CamperManage;
+
+export { SearchCamperForm };
