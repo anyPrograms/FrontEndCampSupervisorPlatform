@@ -80,7 +80,7 @@ const Rooms = (props: any) => {
         setTargetKeys(targetKeys as []);
         if (direction === 'right')//房间新增的人员
         {
-            
+
         } else {
 
         }
@@ -136,6 +136,18 @@ const RoomManage = () => {
             setUndistributedCampers(undistributedCampers as never[]);
             setDistributedCampers(distributedCampers as never[]);
         });
+    };
+
+    const getAllUndistributedCampersData = () => {
+        fetch(baseUrl + 'con/student/undistributed').then(data => data.json()).then(campers => {
+            setUndistributedCampers(campers);
+        });
+    }
+
+    const getDistributedCampersByBunkId = (id: string) => {
+        fetch(baseUrl + 'con/student/findStudentsByBunk/' + id).then(data => data.json()).then(campers => {
+            setDistributedCampers(campers);
+        });
     }
 
     const getAllBunksData = () => {
@@ -172,7 +184,6 @@ const RoomManage = () => {
                 <Statistic title="已分配的人数" value={distributedCampers.length} style={{ marginLeft: '2em' }} valueStyle={{ textAlign: "center", color: 'red' }} />
             </div>
             <Rooms {...{ allBunks, distributedCampers, undistributedCampers }}></Rooms>
-            <Pagination simple defaultCurrent={2} total={40} style={{ textAlign: 'center', padding: '1em' }} />
             <CreateRoom />
         </div>
     )

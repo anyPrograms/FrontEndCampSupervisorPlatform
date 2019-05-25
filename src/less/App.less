@@ -93,7 +93,9 @@
                 >div:first-child {
                     flex-grow: 1;
                 }
-                >div:last-child{//课表
+
+                >div:last-child {
+                    //课表
                     margin-left: 1em;
                     border-left: 1px solid #d9d9d9;
                     flex-grow: 1;
@@ -131,6 +133,49 @@
                 flex-grow: 1;
                 max-width: ~'calc(100% - 3em)';
                 margin-right: 1.5em;
+            }
+
+            .position-manage {
+                max-width: calc(100% - 1.5em);
+                flex-grow: 1;
+
+                .search-button {
+                    width: 100%;
+                    border-radius: 0;
+                }
+
+                .position-button-container {
+                    >button {
+                        width: 6em;
+                        height: 6em;
+                        display: inline-block;
+                    }
+
+                    >button:not(:last-child) {
+                        margin-right: 1em;
+                    }
+                }
+
+                form.hidden {
+                    max-height: 0;
+                }
+
+                form {
+                    overflow: hidden;
+                    text-align: center;
+                    max-height: 100px;
+                    transition: max-height 0.3s cubic-bezier(0.9, 0, 0.3, 0.7), box-shadow 0.3s cubic-bezier(0.9, 0, 0.3, 0.7);
+
+                    >div:not(:last-child) {
+                        min-width: 100px;
+                        margin-right: 1em;
+
+                        >div {
+                            width: 100%;
+                        }
+                    }
+                }
+
             }
         }
     }
