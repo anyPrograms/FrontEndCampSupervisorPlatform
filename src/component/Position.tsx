@@ -53,7 +53,7 @@ const Position: SFC = (props: any) => {
         <div className="position-manage">
             <WrappedHorizontalSearchPositionForm />
             <div className="position-button-container">
-                {[1, 2, 3, 4, 5, 6].map((val: any, key: number) => (<Button {...{ key }}>{val}</Button>))}
+                {['篮球场', '湖南岸', '足球场', 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((val: any, key: number) => (<Button {...{ key }}>{val}</Button>))}
             </div>
         </div>
     )
