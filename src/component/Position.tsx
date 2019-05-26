@@ -1,5 +1,5 @@
 import React, { SFC, useState } from 'react';
-import { Button, Icon, Form, Input, DatePicker, Select } from 'antd';
+import { Button, Icon, Form, Input, DatePicker, Select, Table } from 'antd';
 
 const SearchPositionForm = (props: any) => {
     const { form: { getFieldDecorator } } = props;
@@ -48,13 +48,60 @@ const SearchPositionForm = (props: any) => {
 
 const Position: SFC = (props: any) => {
     const WrappedHorizontalSearchPositionForm: SFC = Form.create()(SearchPositionForm) as any;
+    const columns = [
+        {
+            title: '姓名',
+            dataIndex: 'username',
+        },
+        {
+            title: '时间',
+            dataIndex: 'time',
+        },
+        {
+            title: '日期',
+            dataIndex: 'date',
+        }, {
+            title: '地点',
+            dataIndex: 'position',
+        }
+    ];
+    const data = [
+        {
+            key: '1',
+            username: 'John Brown',
+            time: 32,
+            date: new Date().toDateString(),
+            position: 'New York No. 1 Lake Park',
+        },
+        {
+            key: '2',
+            username: 'John Brown',
+            time: 32,
+            date: new Date().toDateString(),
+            position: 'New York No. 1 Lake Park',
+        },
+        {
+            key: '3',
+            username: 'John Brown',
+            time: 32,
+            date: new Date().toDateString(),
+            position: 'New York No. 1 Lake Park',
+        },
+    ];
+    const onPosition = () => {
+
+    }
 
     return (
         <div className="position-manage">
             <WrappedHorizontalSearchPositionForm />
             <div className="position-button-container">
-                {['篮球场', '湖南岸', '足球场', 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((val: any, key: number) => (<Button {...{ key }}>{val}</Button>))}
+                {['篮球场', '湖南岸', '足球场', 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 2, 2, 3].map((val: any, key: number) => (
+                    <Button {...{ key }} onClick={() => {
+                        
+                    }}>{val}</Button>))}
             </div>
+            <Table columns={columns} dataSource={data} />
         </div>
     )
 }
