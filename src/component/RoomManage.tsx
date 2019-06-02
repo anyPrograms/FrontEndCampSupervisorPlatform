@@ -138,7 +138,7 @@ const RoomManage = () => {
 
     const setStudentToBunk = (studentId: string, bunkId?: string) => {
         const addUrl = baseUrl + `csp/con/student/addStudentToBunk?studentId=${studentId}&bunkId=${bunkId}`;
-        const deleteUrl = baseUrl + `csp/con/student/deleteById/${studentId}`;
+        const deleteUrl = baseUrl + `csp/con/student/deleteStudent/${studentId}`;
         let current = deleteUrl;
         if (bunkId) {
             current = addUrl
