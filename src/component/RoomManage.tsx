@@ -136,8 +136,14 @@ const RoomManage = () => {
             .then(json => setDistributedCampers(json));
     }
 
-    const setStudentToBunk = (studentId: string, bunkId: string) => {
-        fetch(baseUrl + `csp/con/student/addStudentToBunk?studentId=${studentId}&bunkId=${bunkId}`, { method: 'post' }).then(data => data.ok).then(refreshData);
+    const setStudentToBunk = (studentId: string, bunkId?: string) => {
+        const addUrl = baseUrl + `csp/con/student/addStudentToBunk?studentId=${studentId}&bunkId=${bunkId}`;
+        const deleteUrl = baseUrl + `csp/con/student/deleteById/${studentId}`;
+        let current = deleteUrl;
+        if (bunkId) {
+            current = addUrl
+        }
+        fetch(current, { method: 'post' }).then(data => data.ok).then(refreshData);
     }
 
     const getAllBunksData = () => {
